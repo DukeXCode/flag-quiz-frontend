@@ -62,7 +62,7 @@ export class QuizStepComponent {
   }
 
   checkAnswer(index: number) {
-    // Don't allow changing of answer
+    // Don't allow changing of answer / multiple answers
     if (!this.alreadyAnswered()) {
       this.answers.forEach((answer, i) => {
         if (i === index) {
