@@ -27,7 +27,7 @@ export class QuizStepComponent {
     this.answers = answers
   }
 
-  getWrongAnswers(): Answer[] {
+  private getWrongAnswers(): Answer[] {
     const wrongCountries: Country[] = []
     while (wrongCountries.length < 3) {
       const nextAnswer = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)]
@@ -50,7 +50,7 @@ export class QuizStepComponent {
     }
   }
 
-  shuffle(array: any[]): void {
+  private shuffle(array: any[]): void {
     let currentIndex = array.length;
     while (currentIndex != 0) {
       let randomIndex = Math.floor(Math.random() * currentIndex);
