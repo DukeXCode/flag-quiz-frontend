@@ -1,7 +1,7 @@
 <img ngSrc="{{ 'assets/flags/' + county.flag }}" alt="flag" class="flag" height="360" width="540" priority>
 <div class="answer-container">
-  <button class="answer-btn">{{ answers[0] }}</button>
-  <button class="answer-btn">{{ answers[1] }}</button>
-  <button class="answer-btn">{{ answers[2] }}</button>
-  <button class="answer-btn">{{ answers[3] }}</button>
+  <button class="answer-btn" *ngFor="let answer of answers; let i = index"
+          [ngClass]="{'correct': answer.isSelected && answer.isCorrect, 'incorrect': answer.isSelected && !answer.isCorrect}"
+          (click)="checkAnswer(i)">{{ answer.country.name }}
+  </button>
 </div>

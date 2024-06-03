@@ -1,37 +1,53 @@
 import {Component, Input} from '@angular/core';
 import {Country} from "../model/country";
-import {NgOptimizedImage} from "@angular/common";
+import {NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
 import {COUNTRIES} from "../model/country-definiton";
+import {Answer} from "../model/answer";
 
 @Component({
   selector: 'app-quiz-step',
   standalone: true,
   imports: [
-    NgOptimizedImage
+    NgOptimizedImage,
+    NgClass,
+    NgForOf
   ],
   templateUrl: './quiz-step.component.html',
   styleUrl: './quiz-step.component.scss'
 })
 export class QuizStepComponent {
   @Input() county!: Country;
-  answers: string[] = [];
+  answers: Answer[] = [];
+  isAnswered: boolean = false;
 
   ngOnInit(): void {
-    let answers = this.getWrongAnswers()
-    answers.push(this.county.name)
+    const answers = this.getWrongAnswers()
+    answers.push(this.countryToAnswer(this.county, true))
     this.shuffle(answers)
     this.answers = answers
   }
 
-  getWrongAnswers(): string[] {
-    let wrongAnswers: string[] = []
-    while (wrongAnswers.length < 3) {
-      const nextAnswer = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)].name
-      if (!wrongAnswers.includes(nextAnswer) && nextAnswer !== this.county.name) {
-        wrongAnswers.push(nextAnswer)
+  getWrongAnswers(): Answer[] {
+    const wrongCountries: Country[] = []
+    while (wrongCountries.length < 3) {
+      const nextAnswer = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)]
+      if (!wrongCountries.includes(nextAnswer) && nextAnswer !== this.county) {
+        wrongCountries.push(nextAnswer)
       }
     }
+    const wrongAnswers: Answer[] = []
+    wrongCountries.forEach((country) => {
+      wrongAnswers.push(this.countryToAnswer(country, false));
+    })
     return wrongAnswers;
+  }
+
+  private countryToAnswer(country: Country, isCorrect: boolean): Answer {
+    return {
+      country: country,
+      isCorrect: isCorrect,
+      isSelected: false,
+    }
   }
 
   shuffle(array: any[]): void {
@@ -43,5 +59,36 @@ export class QuizStepComponent {
         array[randomIndex], array[currentIndex]
       ];
     }
+  }
+
+  checkAnswer(index: number) {
+    // Don't allow changing of answer
+    if (!this.alreadyAnswered()) {
+      this.answers.forEach((answer, i) => {
+        if (i === index) {
+          answer.isSelected = true;
+          if (answer.isCorrect) {
+            console.log('Answer is correct')
+            // TODO add event to store points
+          } else {
+            console.log('Answer is incorrect')
+            this.answers.forEach((answer) => {
+              if (answer.isCorrect) {
+                answer.isSelected = true
+              }
+            })
+          }
+        }
+      });
+    }
+  }
+
+  private alreadyAnswered() {
+    for (let answer of this.answers) {
+      if (answer.isSelected) {
+        return true;
+      }
+    }
+    return false;
   }
 }
