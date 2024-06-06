@@ -1,8 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {Country} from "../model/country";
 import {NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
-import {COUNTRIES} from "../model/country-definiton";
 import {Answer} from "../model/answer";
+import {CountyService} from "../model/county.service";
 
 @Component({
   selector: 'app-quiz-step',
@@ -16,9 +16,12 @@ import {Answer} from "../model/answer";
   styleUrl: './quiz-step.component.scss'
 })
 export class QuizStepComponent {
+  constructor(private countryService: CountyService) {}
+
   @Input() county!: Country;
   answers: Answer[] = [];
   isAnswered: boolean = false;
+  countries: Country[] = this.countryService.getAll()
 
   ngOnInit(): void {
     const answers = this.getWrongAnswers()
@@ -30,7 +33,7 @@ export class QuizStepComponent {
   private getWrongAnswers(): Answer[] {
     const wrongCountries: Country[] = []
     while (wrongCountries.length < 3) {
-      const nextAnswer = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)]
+      const nextAnswer = (this.countries)[Math.floor(Math.random() * this.countries.length)]
       if (!wrongCountries.includes(nextAnswer) && nextAnswer !== this.county) {
         wrongCountries.push(nextAnswer)
       }
