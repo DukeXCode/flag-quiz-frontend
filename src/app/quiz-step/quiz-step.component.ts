@@ -1,8 +1,7 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Country} from "../model/country";
 import {NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
 import {Answer} from "../model/answer";
-import {CountyService} from "../model/county.service";
 
 @Component({
   selector: 'app-quiz-step',
@@ -15,13 +14,11 @@ import {CountyService} from "../model/county.service";
   templateUrl: './quiz-step.component.html',
   styleUrl: './quiz-step.component.scss'
 })
-export class QuizStepComponent {
-  constructor(private countryService: CountyService) {}
+export class QuizStepComponent implements OnInit {
 
   @Input() county!: Country;
+  @Input() countries!: Country[];
   answers: Answer[] = [];
-  isAnswered: boolean = false;
-  countries: Country[] = this.countryService.getAll()
 
   ngOnInit(): void {
     const answers = this.getWrongAnswers()
@@ -93,5 +90,11 @@ export class QuizStepComponent {
       }
     }
     return false;
+  }
+
+  getFlagPath(): string {
+    return 'assets/flags/' + this.county.name.toLowerCase()
+      .replace(/\s+/g, '-') // Replace all spaces with '-'
+      .concat('.png');
   }
 }

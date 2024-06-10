@@ -3,22 +3,18 @@ import {Country} from "./country";
 export const COUNTRIES: Country[] = [
   {
     id: 1,
-    name: 'South Korea',
-    flag: 'south-korea.png'
+    name: 'South Korea'
   },
   {
     id: 2,
-    name: 'Canada',
-    flag: 'canada.png'
+    name: 'Canada'
   },
   {
     id: 3,
-    name: 'Panama',
-    flag: 'panama.png'
+    name: 'Panama'
   },
   {
     id: 4,
-    name: 'Iceland',
-    flag: 'iceland.png'
+    name: 'Iceland'
   }
 ];
