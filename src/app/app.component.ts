@@ -27,7 +27,6 @@ export class AppComponent implements OnInit {
     this.countyService.getAll().subscribe({
       next: (countries) => {
         this.countries = countries;
-        console.log('Countries fetched successfully:', this.countries);
       },
       error: (error) => {
         console.error('Error fetching countries:', error);
