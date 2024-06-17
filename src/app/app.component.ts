@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {RouterOutlet} from '@angular/router';
 import {QuizStepComponent} from "./quiz-step/quiz-step.component";
-import {COUNTRIES} from "./model/country-definiton";
 import {CountryService} from "./model/country.service";
 import {Country} from "./model/country";
 import {NgIf} from "@angular/common";
@@ -15,6 +14,7 @@ import {NgIf} from "@angular/common";
 })
 export class AppComponent implements OnInit {
   protected countries: Country[] = [];
+  score: number = 0;
 
   constructor(private countyService: CountryService) {
   }
@@ -35,7 +35,9 @@ export class AppComponent implements OnInit {
     });
   }
 
-  getRandomCountry(): Country {
-    return this.countries[Math.floor(Math.random() * this.countries.length)];
+  nextQuestion(isCorrectAnswer: boolean) {
+    if (isCorrectAnswer) {
+      this.score++
+    }
   }
 }

@@ -15,7 +15,7 @@
   justify-content: space-evenly;
 }
 
-.answer-btn {
+.btn {
   border: 0;
   background-color: cornflowerblue;
   color: white;
@@ -23,6 +23,13 @@
   width: 12em;
   height: 2em;
   font-size: 3em;
+}
+
+.next-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 5em;
 }
 
 .correct {

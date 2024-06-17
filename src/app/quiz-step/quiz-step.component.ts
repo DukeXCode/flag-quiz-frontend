@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Country} from "../model/country";
-import {NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
+import {NgClass, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {Answer} from "../model/answer";
 
 @Component({
@@ -9,29 +9,37 @@ import {Answer} from "../model/answer";
   imports: [
     NgOptimizedImage,
     NgClass,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './quiz-step.component.html',
   styleUrl: './quiz-step.component.scss'
 })
 export class QuizStepComponent implements OnInit {
 
-  @Input() county!: Country;
   @Input() countries!: Country[];
+  @Output() nextQuestion = new EventEmitter<boolean>();
+  correctCountry: Country | undefined = undefined;
   answers: Answer[] = [];
+  private isAnsweredCorrectly = false;
 
   ngOnInit(): void {
+    this.correctCountry = this.getRandomCountry()
+    this.answers = this.getAnswers()
+  }
+
+  private getAnswers(): Answer[] {
     const answers = this.getWrongAnswers()
-    answers.push(this.countryToAnswer(this.county, true))
+    answers.push(this.countryToAnswer(this.correctCountry!, true))
     this.shuffle(answers)
-    this.answers = answers
+    return answers
   }
 
   private getWrongAnswers(): Answer[] {
     const wrongCountries: Country[] = []
     while (wrongCountries.length < 3) {
       const nextAnswer = (this.countries)[Math.floor(Math.random() * this.countries.length)]
-      if (!wrongCountries.includes(nextAnswer) && nextAnswer !== this.county) {
+      if (!wrongCountries.includes(nextAnswer) && nextAnswer !== this.correctCountry) {
         wrongCountries.push(nextAnswer)
       }
     }
@@ -63,27 +71,32 @@ export class QuizStepComponent implements OnInit {
 
   checkAnswer(index: number) {
     // Don't allow changing of answer / multiple answers
-    if (!this.alreadyAnswered()) {
-      this.answers.forEach((answer, i) => {
-        if (i === index) {
-          answer.isSelected = true;
-          if (answer.isCorrect) {
-            console.log('Answer is correct')
-            // TODO add event to store points
-          } else {
-            console.log('Answer is incorrect')
-            this.answers.forEach((answer) => {
-              if (answer.isCorrect) {
-                answer.isSelected = true
-              }
-            })
-          }
-        }
-      });
+    if (this.alreadyAnswered()) {
+      return
     }
+
+    this.answers.forEach((answer, i) => {
+      if (i === index) {
+        answer.isSelected = true;
+        if (answer.isCorrect) {
+          this.isAnsweredCorrectly = true
+        } else {
+          this.isAnsweredCorrectly = false
+          this.highlightCorrectAnswer()
+        }
+      }
+    });
   }
 
-  private alreadyAnswered() {
+  private highlightCorrectAnswer() {
+    this.answers.forEach((answer) => {
+      if (answer.isCorrect) {
+        answer.isSelected = true
+      }
+    })
+  }
+
+  alreadyAnswered() {
     for (let answer of this.answers) {
       if (answer.isSelected) {
         return true;
@@ -93,8 +106,19 @@ export class QuizStepComponent implements OnInit {
   }
 
   getFlagPath(): string {
-    return 'assets/flags/' + this.county.name.toLowerCase()
+    // @ts-ignore
+    return 'assets/flags/' + this.correctCountry.name.toLowerCase()
       .replace(/\s+/g, '-') // Replace all spaces with '-'
       .concat('.png');
+  }
+
+  next() {
+    this.nextQuestion.emit(this.isAnsweredCorrectly);
+    this.correctCountry = this.getRandomCountry()
+    this.answers = this.getAnswers()
+  }
+
+  private getRandomCountry(): Country {
+    return this.countries[Math.floor(Math.random() * this.countries.length)];
   }
 }
