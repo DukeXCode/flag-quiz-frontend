@@ -1,4 +1,4 @@
-<img *ngIf="correctCountry" [ngSrc]="getFlagPath()" alt="flag" class="flag" height="360" width="540" priority>
+<img *ngIf="correctCountry" [src]="getFlagPath()" alt="flag" class="flag">
 <div class="answer-container">
   <button class="btn answer-btn" *ngFor="let answer of answers; let i = index"
           [ngClass]="{'correct': answer.isSelected && answer.isCorrect, 'incorrect': answer.isSelected && !answer.isCorrect}"
