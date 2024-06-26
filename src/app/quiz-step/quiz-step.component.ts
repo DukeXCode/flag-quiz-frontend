@@ -106,10 +106,7 @@ export class QuizStepComponent implements OnInit {
   }
 
   getFlagPath(): string {
-    // @ts-ignore
-    return 'assets/flags/' + this.correctCountry.name.toLowerCase()
-      .replace(/\s+/g, '-') // Replace all spaces with '-'
-      .concat('.png');
+    return 'assets/flags/' + this.correctCountry?.iso2.toLowerCase().concat('.png');
   }
 
   next() {
