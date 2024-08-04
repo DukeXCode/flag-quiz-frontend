@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Country} from "../model/country";
 import {NgClass, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {Answer} from "../model/answer";
+import {AnswerDataService} from "../model/answer-data.service";
+import {AnswerData} from "../model/answer-data";
 
 @Component({
   selector: 'app-quiz-step',
@@ -16,6 +18,9 @@ import {Answer} from "../model/answer";
   styleUrl: './quiz-step.component.scss'
 })
 export class QuizStepComponent implements OnInit {
+
+  constructor(private answerDataService: AnswerDataService) {
+  }
 
   @Input() countries!: Country[];
   @Output() nextQuestion = new EventEmitter<boolean>();
@@ -75,17 +80,34 @@ export class QuizStepComponent implements OnInit {
       return
     }
 
+    let correctAnswer: Answer | undefined = undefined
+
     this.answers.forEach((answer, i) => {
       if (i === index) {
         answer.isSelected = true;
         if (answer.isCorrect) {
           this.isAnsweredCorrectly = true
+          correctAnswer = this.answers[i]
         } else {
           this.isAnsweredCorrectly = false
           this.highlightCorrectAnswer()
         }
       }
     });
+
+    if (correctAnswer === undefined) {
+      correctAnswer = this.answers.filter((a) => a.isCorrect)[0]
+    }
+    this.submitAnswer(this.answers[index].country.id, correctAnswer!!.country.id)
+  }
+
+  private submitAnswer(selectedCountryId: number, correctCountyId: number) {
+    const data: AnswerData = {
+      selected_country: selectedCountryId,
+      correct_country: correctCountyId,
+      is_correct: selectedCountryId === correctCountyId
+    }
+    this.answerDataService.post(data).subscribe(() => console.log('Answer successfully submitted'))
   }
 
   private highlightCorrectAnswer() {
