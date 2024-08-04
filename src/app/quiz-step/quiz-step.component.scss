@@ -1,8 +1,14 @@
+.flag-wrapper {
+  height: 20em;
+}
+
 .flag {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5em;
+  margin-top: 3em;
+  width: auto;
+  max-height: 100%;
 }
 
 .answer-container {
@@ -15,7 +21,7 @@
   justify-content: space-evenly;
 }
 
-.answer-btn {
+.btn {
   border: 0;
   background-color: cornflowerblue;
   color: white;
@@ -23,6 +29,13 @@
   width: 12em;
   height: 2em;
   font-size: 3em;
+}
+
+.next-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 3em;
 }
 
 .correct {

@@ -1,7 +1,12 @@
-<img ngSrc="{{ 'assets/flags/' + county.flag }}" alt="flag" class="flag" height="360" width="540" priority>
+<div class="flag-wrapper">
+  <img *ngIf="correctCountry" [src]="getFlagPath()" alt="flag" class="flag">
+</div>
 <div class="answer-container">
-  <button class="answer-btn" *ngFor="let answer of answers; let i = index"
+  <button class="btn answer-btn" *ngFor="let answer of answers; let i = index"
           [ngClass]="{'correct': answer.isSelected && answer.isCorrect, 'incorrect': answer.isSelected && !answer.isCorrect}"
           (click)="checkAnswer(i)">{{ answer.country.name }}
   </button>
+</div>
+<div class="next-container" *ngIf="alreadyAnswered()">
+  <button class="btn next-btn" (click)="next()">Next</button>
 </div>

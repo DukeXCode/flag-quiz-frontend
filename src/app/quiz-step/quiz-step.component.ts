@@ -1,8 +1,9 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Country} from "../model/country";
-import {NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
-import {COUNTRIES} from "../model/country-definiton";
+import {NgClass, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {Answer} from "../model/answer";
+import {AnswerDataService} from "../model/answer-data.service";
+import {AnswerData} from "../model/answer-data";
 
 @Component({
   selector: 'app-quiz-step',
@@ -10,28 +11,40 @@ import {Answer} from "../model/answer";
   imports: [
     NgOptimizedImage,
     NgClass,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './quiz-step.component.html',
   styleUrl: './quiz-step.component.scss'
 })
-export class QuizStepComponent {
-  @Input() county!: Country;
+export class QuizStepComponent implements OnInit {
+
+  constructor(private answerDataService: AnswerDataService) {
+  }
+
+  @Input() countries!: Country[];
+  @Output() nextQuestion = new EventEmitter<boolean>();
+  correctCountry: Country | undefined = undefined;
   answers: Answer[] = [];
-  isAnswered: boolean = false;
+  private isAnsweredCorrectly = false;
 
   ngOnInit(): void {
+    this.correctCountry = this.getRandomCountry()
+    this.answers = this.getAnswers()
+  }
+
+  private getAnswers(): Answer[] {
     const answers = this.getWrongAnswers()
-    answers.push(this.countryToAnswer(this.county, true))
+    answers.push(this.countryToAnswer(this.correctCountry!, true))
     this.shuffle(answers)
-    this.answers = answers
+    return answers
   }
 
   private getWrongAnswers(): Answer[] {
     const wrongCountries: Country[] = []
     while (wrongCountries.length < 3) {
-      const nextAnswer = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)]
-      if (!wrongCountries.includes(nextAnswer) && nextAnswer !== this.county) {
+      const nextAnswer = (this.countries)[Math.floor(Math.random() * this.countries.length)]
+      if (!wrongCountries.includes(nextAnswer) && nextAnswer !== this.correctCountry) {
         wrongCountries.push(nextAnswer)
       }
     }
@@ -63,32 +76,68 @@ export class QuizStepComponent {
 
   checkAnswer(index: number) {
     // Don't allow changing of answer / multiple answers
-    if (!this.alreadyAnswered()) {
-      this.answers.forEach((answer, i) => {
-        if (i === index) {
-          answer.isSelected = true;
-          if (answer.isCorrect) {
-            console.log('Answer is correct')
-            // TODO add event to store points
-          } else {
-            console.log('Answer is incorrect')
-            this.answers.forEach((answer) => {
-              if (answer.isCorrect) {
-                answer.isSelected = true
-              }
-            })
-          }
-        }
-      });
+    if (this.alreadyAnswered()) {
+      return
     }
+
+    let correctAnswer: Answer | undefined = undefined
+
+    this.answers.forEach((answer, i) => {
+      if (i === index) {
+        answer.isSelected = true;
+        if (answer.isCorrect) {
+          this.isAnsweredCorrectly = true
+          correctAnswer = this.answers[i]
+        } else {
+          this.isAnsweredCorrectly = false
+          this.highlightCorrectAnswer()
+        }
+      }
+    });
+
+    if (correctAnswer === undefined) {
+      correctAnswer = this.answers.filter((a) => a.isCorrect)[0]
+    }
+    this.submitAnswer(this.answers[index].country.id, correctAnswer!!.country.id)
   }
 
-  private alreadyAnswered() {
+  private submitAnswer(selectedCountryId: number, correctCountyId: number) {
+    const data: AnswerData = {
+      selected_country: selectedCountryId,
+      correct_country: correctCountyId,
+      is_correct: selectedCountryId === correctCountyId
+    }
+    this.answerDataService.post(data).subscribe(() => console.log('Answer successfully submitted'))
+  }
+
+  private highlightCorrectAnswer() {
+    this.answers.forEach((answer) => {
+      if (answer.isCorrect) {
+        answer.isSelected = true
+      }
+    })
+  }
+
+  alreadyAnswered() {
     for (let answer of this.answers) {
       if (answer.isSelected) {
         return true;
       }
     }
     return false;
+  }
+
+  getFlagPath(): string {
+    return 'assets/flags/' + this.correctCountry?.iso2.toLowerCase().concat('.png');
+  }
+
+  next() {
+    this.nextQuestion.emit(this.isAnsweredCorrectly);
+    this.correctCountry = this.getRandomCountry()
+    this.answers = this.getAnswers()
+  }
+
+  private getRandomCountry(): Country {
+    return this.countries[Math.floor(Math.random() * this.countries.length)];
   }
 }
