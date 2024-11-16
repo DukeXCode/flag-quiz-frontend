@@ -2,6 +2,6 @@
 
 export const environment = {
   production: false,
-  supabaseUrl: '<URL>',
-  supabaseKey: '<KEY>'
+  supabaseUrl: process.env['SUPABASE_URL'],
+  supabaseKey: process.env['SUPABASE_KEY'],
 }
