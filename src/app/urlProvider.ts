@@ -1,0 +1,2 @@
+const url = 'https://zljncdqobsnmmzvqzhrp.supabase.co'
+const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpsam5jZHFvYnNubW16dnF6aHJwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTc2ODA5MDMsImV4cCI6MjAzMzI1NjkwM30.FshyB1jITAqGbVeYd9RA-EixM8hYyxjn8loDiqRO6xU'
