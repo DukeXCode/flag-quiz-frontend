@@ -9,7 +9,7 @@ import {requestHeaders} from "../rest-helper";
   providedIn: 'root'
 })
 export class CountryRestService {
-  private url = `${environment.supabaseUrl}/rest/v1/countries`;
+  private url = `${environment.url}/rest/v1/countries`;
 
   constructor(private readonly http: HttpClient) {}
 

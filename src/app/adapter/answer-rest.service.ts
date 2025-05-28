@@ -9,7 +9,7 @@ import {environment} from "../../environments/environment";
   providedIn: 'root'
 })
 export class AnswerRestService {
-  private url = `${environment.supabaseUrl}/rest/v1/answers`;
+  private url = `${environment.url}/rest/v1/answers`;
 
   constructor(private readonly http: HttpClient) {
   }

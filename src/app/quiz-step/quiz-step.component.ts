@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Country} from "../model/country";
-import {NgClass, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {Answer} from "../model/answer";
 import {AnswerDataService} from "../model/answer-data.service";
 import {AnswerData} from "../model/answer-data";
@@ -9,7 +9,6 @@ import {AnswerData} from "../model/answer-data";
   selector: 'app-quiz-step',
   standalone: true,
   imports: [
-    NgOptimizedImage,
     NgClass,
     NgForOf,
     NgIf
@@ -103,9 +102,9 @@ export class QuizStepComponent implements OnInit {
 
   private submitAnswer(selectedCountryId: number, correctCountyId: number) {
     const data: AnswerData = {
-      selected_country: selectedCountryId,
-      correct_country: correctCountyId,
-      is_correct: selectedCountryId === correctCountyId
+      selectedCountry: selectedCountryId,
+      correctCountry: correctCountyId,
+      isCorrect: selectedCountryId === correctCountyId
     }
     this.answerDataService.post(data).subscribe(() => console.log('Answer successfully submitted'))
   }
