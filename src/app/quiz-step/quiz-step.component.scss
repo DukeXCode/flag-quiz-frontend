@@ -1,5 +1,6 @@
 .flag-wrapper {
   height: 20em;
+  margin-bottom: 5em;
 }
 
 .flag {
@@ -12,13 +13,13 @@
 }
 
 .answer-container {
-  width: 70%;
-  padding: 10px;
-  margin: 5em auto auto;
   display: grid;
-  gap: 1em 1.5em;
-  grid-template-columns: auto auto;
-  justify-content: space-evenly;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 50% 50%;
+  grid-gap: 1em;
+  justify-content: center;
+  width: 80%;
+  padding: 0 10%;
 }
 
 .btn {
@@ -26,16 +27,19 @@
   background-color: cornflowerblue;
   color: white;
   border-radius: 2em;
-  width: 12em;
-  height: 2em;
   font-size: 3em;
 }
 
 .next-container {
-  width: 100%;
+  width: 60%;
   display: flex;
   justify-content: center;
   margin-top: 3em;
+  padding: 0 20%;
+}
+
+.next-btn {
+  min-width: 30%;
 }
 
 .correct {
