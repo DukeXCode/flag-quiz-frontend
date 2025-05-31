@@ -154,8 +154,9 @@ export class QuizStepComponent implements OnInit {
 
   next() {
     this.nextQuestion.emit(this.isAnsweredCorrectly);
-    this.correctCountry = this.getRandomCountry()
-    this.fetchIntelligentAnswers()
+    this.answersLoaded = false;
+    this.correctCountry = this.getRandomCountry();
+    this.fetchIntelligentAnswers();
   }
 
   private getRandomCountry(): Country {
