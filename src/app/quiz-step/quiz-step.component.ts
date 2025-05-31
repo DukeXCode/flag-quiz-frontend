@@ -1,25 +1,19 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Country} from "../model/country";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
-import {Answer} from "../model/answer";
-import {AnswerDataService} from "../model/answer-data.service";
-import {AnswerData} from "../model/answer-data";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Country } from '../model/country';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { Answer } from '../model/answer';
+import { AnswerDataService } from '../model/answer-data.service';
+import { AnswerData } from '../model/answer-data';
 
 @Component({
   selector: 'app-quiz-step',
   standalone: true,
-  imports: [
-    NgClass,
-    NgForOf,
-    NgIf
-  ],
+  imports: [NgClass, NgForOf, NgIf],
   templateUrl: './quiz-step.component.html',
-  styleUrl: './quiz-step.component.scss'
+  styleUrl: './quiz-step.component.scss',
 })
 export class QuizStepComponent implements OnInit {
-
-  constructor(private answerDataService: AnswerDataService) {
-  }
+  constructor(private answerDataService: AnswerDataService) {}
 
   @Input() countries!: Country[];
   @Output() nextQuestion = new EventEmitter<boolean>();
@@ -29,50 +23,56 @@ export class QuizStepComponent implements OnInit {
   protected answersLoaded = false;
 
   ngOnInit(): void {
-    this.correctCountry = this.getRandomCountry()
-    this.fetchIntelligentAnswers()
+    this.correctCountry = this.getRandomCountry();
+    this.fetchIntelligentAnswers();
   }
 
   private fetchIntelligentAnswers(): void {
     this.answerDataService.getWrongAnswers(this.correctCountry!.id).subscribe({
-      next: (answerIds) => {
-        const answers: Answer[] = []
-        answerIds.forEach((answerId) => {
+      next: answerIds => {
+        const answers: Answer[] = [];
+        answerIds.forEach(answerId => {
           answers.push({
             country: this.countries.find(country => country.id === answerId)!,
             isCorrect: false,
             isSelected: false,
-          })
+          });
         });
         this.answers = answers;
-        this.answers = this.getAnswers()
+        this.answers = this.getAnswers();
         this.answersLoaded = true;
       },
-      error: (error) => {
+      error: error => {
         console.error('Error fetching intelligent answers:', error);
-      }
+      },
     });
   }
 
   private getAnswers(): Answer[] {
-    const answers = this.getWrongAnswers()
-    answers.push(this.countryToAnswer(this.correctCountry!, true))
-    this.shuffle(answers)
-    return answers
+    const answers = this.getWrongAnswers();
+    answers.push(this.countryToAnswer(this.correctCountry!, true));
+    this.shuffle(answers);
+    return answers;
   }
 
   private getWrongAnswers(): Answer[] {
-    const wrongCountries: Country[] = this.answers.map(answer => answer.country);
+    const wrongCountries: Country[] = this.answers.map(
+      answer => answer.country
+    );
     while (wrongCountries.length < 3) {
-      const nextAnswer = (this.countries)[Math.floor(Math.random() * this.countries.length)]
-      if (!wrongCountries.includes(nextAnswer) && nextAnswer !== this.correctCountry) {
-        wrongCountries.push(nextAnswer)
+      const nextAnswer =
+        this.countries[Math.floor(Math.random() * this.countries.length)];
+      if (
+        !wrongCountries.includes(nextAnswer) &&
+        nextAnswer !== this.correctCountry
+      ) {
+        wrongCountries.push(nextAnswer);
       }
     }
-    const wrongAnswers: Answer[] = []
-    wrongCountries.forEach((country) => {
+    const wrongAnswers: Answer[] = [];
+    wrongCountries.forEach(country => {
       wrongAnswers.push(this.countryToAnswer(country, false));
-    })
+    });
     return wrongAnswers;
   }
 
@@ -81,7 +81,7 @@ export class QuizStepComponent implements OnInit {
       country: country,
       isCorrect: isCorrect,
       isSelected: false,
-    }
+    };
   }
 
   private shuffle(array: any[]): void {
@@ -90,7 +90,8 @@ export class QuizStepComponent implements OnInit {
       let randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
       [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]
+        array[randomIndex],
+        array[currentIndex],
       ];
     }
   }
@@ -98,45 +99,50 @@ export class QuizStepComponent implements OnInit {
   checkAnswer(index: number) {
     // Don't allow changing of answer / multiple answers
     if (this.alreadyAnswered()) {
-      return
+      return;
     }
 
-    let correctAnswer: Answer | undefined = undefined
+    let correctAnswer: Answer | undefined = undefined;
 
     this.answers.forEach((answer, i) => {
       if (i === index) {
         answer.isSelected = true;
         if (answer.isCorrect) {
-          this.isAnsweredCorrectly = true
-          correctAnswer = this.answers[i]
+          this.isAnsweredCorrectly = true;
+          correctAnswer = this.answers[i];
         } else {
-          this.isAnsweredCorrectly = false
-          this.highlightCorrectAnswer()
+          this.isAnsweredCorrectly = false;
+          this.highlightCorrectAnswer();
         }
       }
     });
 
     if (correctAnswer === undefined) {
-      correctAnswer = this.answers.filter((a) => a.isCorrect)[0]
+      correctAnswer = this.answers.filter(a => a.isCorrect)[0];
     }
-    this.submitAnswer(this.answers[index].country.id, correctAnswer!!.country.id)
+    this.submitAnswer(
+      this.answers[index].country.id,
+      correctAnswer!!.country.id
+    );
   }
 
   private submitAnswer(selectedCountryId: number, correctCountyId: number) {
     const data: AnswerData = {
       selectedCountry: selectedCountryId,
       correctCountry: correctCountyId,
-      isCorrect: selectedCountryId === correctCountyId
-    }
-    this.answerDataService.post(data).subscribe(() => console.log('Answer successfully submitted'))
+      isCorrect: selectedCountryId === correctCountyId,
+    };
+    this.answerDataService
+      .post(data)
+      .subscribe(() => console.log('Answer successfully submitted'));
   }
 
   private highlightCorrectAnswer() {
-    this.answers.forEach((answer) => {
+    this.answers.forEach(answer => {
       if (answer.isCorrect) {
-        answer.isSelected = true
+        answer.isSelected = true;
       }
-    })
+    });
   }
 
   alreadyAnswered() {
@@ -149,7 +155,9 @@ export class QuizStepComponent implements OnInit {
   }
 
   getFlagPath(): string {
-    return 'assets/flags/' + this.correctCountry?.iso2.toLowerCase().concat('.png');
+    return (
+      'assets/flags/' + this.correctCountry?.iso2.toLowerCase().concat('.png')
+    );
   }
 
   next() {

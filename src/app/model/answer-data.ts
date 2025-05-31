@@ -1,5 +1,5 @@
 export interface AnswerData {
-  selectedCountry: number,
-  correctCountry: number,
-  isCorrect: boolean
+  selectedCountry: number;
+  correctCountry: number;
+  isCorrect: boolean;
 }

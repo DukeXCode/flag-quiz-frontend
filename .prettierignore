@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Angular specific
+.angular/
+
+# Other
+package-lock.json

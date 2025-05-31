@@ -7,7 +7,11 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:flag-quiz-frontend": "node dist/flag-quiz-frontend/server/server.mjs"
+    "serve:ssr:flag-quiz-frontend": "node dist/flag-quiz-frontend/server/server.mjs",
+    "format": "prettier --write \"src/**/*.{ts,html,css,scss,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,css,scss,json}\"",
+    "lint": "ng lint",
+    "lint:fix": "ng lint --fix"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +32,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.8",
+    "@angular-eslint/schematics": "^19.6.0",
     "@angular/cli": "^17.3.8",
     "@angular/compiler-cli": "^17.3.0",
     "@types/express": "^4.17.17",
@@ -39,6 +44,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "prettier": "^3.5.3",
     "typescript": "~5.4.2"
   }
 }

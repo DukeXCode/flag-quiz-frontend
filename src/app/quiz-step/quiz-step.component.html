@@ -1,10 +1,17 @@
 <div class="flag-wrapper">
-  <img *ngIf="correctCountry" [src]="getFlagPath()" alt="flag" class="flag">
+  <img *ngIf="correctCountry" [src]="getFlagPath()" alt="flag" class="flag" />
 </div>
 <div class="answer-container" *ngIf="answersLoaded">
-  <button class="btn answer-btn" *ngFor="let answer of answers; let i = index"
-          [ngClass]="{'correct': answer.isSelected && answer.isCorrect, 'incorrect': answer.isSelected && !answer.isCorrect}"
-          (click)="checkAnswer(i)">{{ answer.country.name }}
+  <button
+    class="btn answer-btn"
+    *ngFor="let answer of answers; let i = index"
+    [ngClass]="{
+      correct: answer.isSelected && answer.isCorrect,
+      incorrect: answer.isSelected && !answer.isCorrect,
+    }"
+    (click)="checkAnswer(i)"
+  >
+    {{ answer.country.name }}
   </button>
 </div>
 <div class="next-container" *ngIf="alreadyAnswered()">

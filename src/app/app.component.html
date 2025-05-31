@@ -1,4 +1,7 @@
-<app-quiz-step *ngIf="countries.length > 0" [countries]="countries"
-               (nextQuestion)="nextQuestion($event)"></app-quiz-step>
+<app-quiz-step
+  *ngIf="countries.length > 0"
+  [countries]="countries"
+  (nextQuestion)="nextQuestion($event)"
+></app-quiz-step>
 
-<router-outlet/>
+<router-outlet />
