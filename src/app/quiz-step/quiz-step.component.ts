@@ -34,8 +34,6 @@ export class QuizStepComponent implements OnInit {
   }
 
   private fetchIntelligentAnswers(): void {
-    console.log("Loading...")
-    console.log("Loading...")
     this.answerDataService.getWrongAnswers(this.correctCountry!.id).subscribe({
       next: (answerIds) => {
         const answers: Answer[] = []
@@ -48,7 +46,6 @@ export class QuizStepComponent implements OnInit {
         });
         this.answers = answers;
         this.answers = this.getAnswers()
-        console.log("Final answers", this.answers);
         this.answersLoaded = true;
       },
       error: (error) => {
