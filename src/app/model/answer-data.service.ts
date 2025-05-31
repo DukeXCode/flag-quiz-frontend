@@ -13,4 +13,8 @@ export class AnswerDataService {
   post(data: AnswerData): Observable<AnswerData> {
     return this.answerRestService.post(data)
   }
+
+  getWrongAnswers(countryId: number): Observable<number[]> {
+    return this.answerRestService.getWrongAnswers(countryId)
+  }
 }

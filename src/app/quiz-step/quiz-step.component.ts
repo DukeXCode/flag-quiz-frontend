@@ -26,10 +26,35 @@ export class QuizStepComponent implements OnInit {
   correctCountry: Country | undefined = undefined;
   answers: Answer[] = [];
   private isAnsweredCorrectly = false;
+  protected answersLoaded = false;
 
   ngOnInit(): void {
     this.correctCountry = this.getRandomCountry()
-    this.answers = this.getAnswers()
+    this.fetchIntelligentAnswers()
+  }
+
+  private fetchIntelligentAnswers(): void {
+    console.log("Loading...")
+    console.log("Loading...")
+    this.answerDataService.getWrongAnswers(this.correctCountry!.id).subscribe({
+      next: (answerIds) => {
+        const answers: Answer[] = []
+        answerIds.forEach((answerId) => {
+          answers.push({
+            country: this.countries.find(country => country.id === answerId)!,
+            isCorrect: false,
+            isSelected: false,
+          })
+        });
+        this.answers = answers;
+        this.answers = this.getAnswers()
+        console.log("Final answers", this.answers);
+        this.answersLoaded = true;
+      },
+      error: (error) => {
+        console.error('Error fetching intelligent answers:', error);
+      }
+    });
   }
 
   private getAnswers(): Answer[] {
@@ -40,7 +65,7 @@ export class QuizStepComponent implements OnInit {
   }
 
   private getWrongAnswers(): Answer[] {
-    const wrongCountries: Country[] = []
+    const wrongCountries: Country[] = this.answers.map(answer => answer.country);
     while (wrongCountries.length < 3) {
       const nextAnswer = (this.countries)[Math.floor(Math.random() * this.countries.length)]
       if (!wrongCountries.includes(nextAnswer) && nextAnswer !== this.correctCountry) {
@@ -133,7 +158,7 @@ export class QuizStepComponent implements OnInit {
   next() {
     this.nextQuestion.emit(this.isAnsweredCorrectly);
     this.correctCountry = this.getRandomCountry()
-    this.answers = this.getAnswers()
+    this.fetchIntelligentAnswers()
   }
 
   private getRandomCountry(): Country {

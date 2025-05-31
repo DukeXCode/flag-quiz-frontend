@@ -17,4 +17,8 @@ export class AnswerRestService {
   public post(data: AnswerData): Observable<AnswerData> {
     return this.http.post<AnswerData>(this.url, data, {headers: requestHeaders})
   }
+
+  public getWrongAnswers(countryId: number): Observable<number[]> {
+    return this.http.get<number[]>(`${this.url}/wrong/countries/${countryId}`, {headers: requestHeaders})
+  }
 }
