@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  url: '<prod-url>',
+  url: 'https://flag-quiz-api.dukex.ch',
 };
