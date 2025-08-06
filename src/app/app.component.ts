@@ -6,11 +6,10 @@ import { Country } from './model/country';
 import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, QuizStepComponent, NgIf],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+    selector: 'app-root',
+    imports: [RouterOutlet, QuizStepComponent, NgIf],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   protected countries: Country[] = [];

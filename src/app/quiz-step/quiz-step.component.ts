@@ -6,11 +6,10 @@ import { AnswerDataService } from '../model/answer-data.service';
 import { AnswerData } from '../model/answer-data';
 
 @Component({
-  selector: 'app-quiz-step',
-  standalone: true,
-  imports: [NgClass, NgForOf, NgIf],
-  templateUrl: './quiz-step.component.html',
-  styleUrl: './quiz-step.component.scss',
+    selector: 'app-quiz-step',
+    imports: [NgClass, NgForOf, NgIf],
+    templateUrl: './quiz-step.component.html',
+    styleUrl: './quiz-step.component.scss'
 })
 export class QuizStepComponent implements OnInit {
   constructor(private answerDataService: AnswerDataService) {}
