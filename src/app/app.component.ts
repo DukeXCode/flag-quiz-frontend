@@ -3,11 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { QuizStepComponent } from './quiz-step/quiz-step.component';
 import { CountryService } from './model/country.service';
 import { Country } from './model/country';
-import { NgIf } from '@angular/common';
+
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, QuizStepComponent, NgIf],
+    imports: [RouterOutlet, QuizStepComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
