@@ -1,13 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { Country } from '../model/country';
-import { NgClass } from '@angular/common';
 import { Answer } from '../model/answer';
 import { AnswerDataService } from '../model/answer-data.service';
 import { AnswerData } from '../model/answer-data';
 
 @Component({
     selector: 'app-quiz-step',
-    imports: [NgClass],
+    imports: [],
     templateUrl: './quiz-step.component.html',
     styleUrl: './quiz-step.component.scss'
 })
@@ -24,6 +23,20 @@ export class QuizStepComponent implements OnInit {
   ngOnInit(): void {
     this.correctCountry = this.getRandomCountry();
     this.fetchIntelligentAnswers();
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent): void {
+    const key = event.key;
+    if (['1', '2', '3', '4'].includes(key)) {
+      const index = parseInt(key, 10) - 1;
+      if (this.answersLoaded && !this.alreadyAnswered()) {
+        this.checkAnswer(index);
+      }
+    } else if ((key === 'Enter' || key === ' ') && this.alreadyAnswered()) {
+      event.preventDefault();
+      this.next();
+    }
   }
 
   private fetchIntelligentAnswers(): void {

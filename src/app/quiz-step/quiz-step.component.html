@@ -1,28 +1,91 @@
-<div class="flag-wrapper">
-  @if (correctCountry) {
-    <img [src]="getFlagPath()" alt="flag" class="flag" />
+<div class="quiz-container">
+  <header class="quiz-header">
+    <div class="compass-rose">
+      <svg viewBox="0 0 100 100" class="compass">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
+        <path d="M50 5 L53 50 L50 95 L47 50 Z" fill="currentColor" opacity="0.6"/>
+        <path d="M5 50 L50 47 L95 50 L50 53 Z" fill="currentColor" opacity="0.6"/>
+        <circle cx="50" cy="50" r="6" fill="currentColor" opacity="0.8"/>
+        <circle cx="50" cy="50" r="3" fill="var(--color-gold)"/>
+      </svg>
+    </div>
+    <div class="header-content">
+      <p class="subtitle">Navigate the nations of our world</p>
+    </div>
+  </header>
+
+  <main class="quiz-main">
+    <div class="flag-showcase">
+      <div class="showcase-frame">
+        <div class="frame-corner top-left"></div>
+        <div class="frame-corner top-right"></div>
+        <div class="frame-corner bottom-left"></div>
+        <div class="frame-corner bottom-right"></div>
+
+        <div class="flag-container">
+          @if (correctCountry) {
+            <img
+              [src]="getFlagPath()"
+              alt="Flag to identify"
+              class="flag"
+              [class.flag-reveal]="answersLoaded"
+            />
+          }
+          <div class="flag-shimmer"></div>
+        </div>
+      </div>
+      <p class="identify-prompt">Identify this nation</p>
+    </div>
+
+    @if (answersLoaded) {
+      <div class="answers-section">
+        <div class="section-divider">
+          <span class="divider-line"></span>
+          <span class="divider-ornament">✦</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <div class="answer-grid">
+          @for (answer of answers; track answer; let i = $index) {
+            <button
+              class="answer-btn"
+              [class.correct]="answer.isSelected && answer.isCorrect"
+              [class.incorrect]="answer.isSelected && !answer.isCorrect"
+              [class.reveal]="answersLoaded"
+              [style.animation-delay]="(i * 80) + 'ms'"
+              (click)="checkAnswer(i)"
+              [disabled]="alreadyAnswered()"
+            >
+              <span class="answer-marker">{{ i + 1 }}</span>
+              <span class="answer-text">{{ answer.country.name }}</span>
+              @if (answer.isSelected && answer.isCorrect) {
+                <span class="answer-icon correct-icon">✓</span>
+              }
+              @if (answer.isSelected && !answer.isCorrect) {
+                <span class="answer-icon incorrect-icon">✗</span>
+              }
+            </button>
+          }
+        </div>
+
+        <div class="section-divider">
+          <span class="divider-line"></span>
+          <span class="divider-ornament">✦</span>
+          <span class="divider-line"></span>
+        </div>
+      </div>
+    }
+  </main>
+
+  @if (alreadyAnswered()) {
+    <div class="next-section">
+      <div class="next-section-inner">
+        <button class="next-btn" (click)="next()">
+          <span class="btn-text">Continue Journey</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
   }
 </div>
-
-@if (answersLoaded) {
-  <div class="answer-container">
-    @for (answer of answers; track answer; let i = $index) {
-      <button
-        class="btn answer-btn"
-        [ngClass]="{
-          correct: answer.isSelected && answer.isCorrect,
-          incorrect: answer.isSelected && !answer.isCorrect
-        }"
-        (click)="checkAnswer(i)"
-      >
-        {{ answer.country.name }}
-      </button>
-    }
-  </div>
-}
-
-@if (alreadyAnswered()) {
-  <div class="next-container">
-    <button class="btn next-btn" (click)="next()">Next</button>
-  </div>
-}
