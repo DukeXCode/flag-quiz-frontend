@@ -1,4 +1,26 @@
-@if (countries.length > 0) {
+@if (mode === null) {
+  <app-start-screen (modeSelected)="onModeSelected($event)"></app-start-screen>
+} @else if (finished) {
+  <app-game-over
+    [score]="score"
+    [total]="flagLimit"
+    (playAgain)="playAgain()"
+    (backToMenu)="backToMenu()"
+  ></app-game-over>
+} @else if (countries.length > 0) {
+  <div class="hud">
+    @if (mode === 'limited') {
+      <div class="hud-chip">
+        <span class="hud-label">Flag</span>
+        <span class="hud-value">{{ flagsAnswered + 1 }} / {{ flagLimit }}</span>
+      </div>
+    }
+    <div class="hud-chip">
+      <span class="hud-label">Score</span>
+      <span class="hud-value">{{ score }}</span>
+    </div>
+    <button class="hud-exit" (click)="backToMenu()" aria-label="Back to menu">✕</button>
+  </div>
   <app-quiz-step
     [countries]="countries"
     (nextQuestion)="nextQuestion($event)"

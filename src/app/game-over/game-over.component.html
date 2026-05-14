@@ -1,0 +1,52 @@
+<div class="gameover-container">
+  <header class="gameover-header">
+    <div class="compass-rose">
+      <svg viewBox="0 0 100 100" class="compass">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
+        <path d="M50 5 L53 50 L50 95 L47 50 Z" fill="currentColor" opacity="0.6"/>
+        <path d="M5 50 L50 47 L95 50 L50 53 Z" fill="currentColor" opacity="0.6"/>
+        <circle cx="50" cy="50" r="6" fill="currentColor" opacity="0.8"/>
+        <circle cx="50" cy="50" r="3" fill="var(--color-gold)"/>
+      </svg>
+    </div>
+    <p class="eyebrow">Expedition complete</p>
+    <h1 class="title">Voyage's End</h1>
+  </header>
+
+  <div class="section-divider">
+    <span class="divider-line"></span>
+    <span class="divider-ornament">✦</span>
+    <span class="divider-line"></span>
+  </div>
+
+  <div class="score-card">
+    <div class="frame-corner top-left"></div>
+    <div class="frame-corner top-right"></div>
+    <div class="frame-corner bottom-left"></div>
+    <div class="frame-corner bottom-right"></div>
+    <p class="score-label">Flags identified</p>
+    <p class="score-value">
+      <span class="score-current">{{ score }}</span>
+      <span class="score-sep">/</span>
+      <span class="score-total">{{ total }}</span>
+    </p>
+    <p class="verdict">{{ verdict }}</p>
+  </div>
+
+  <div class="section-divider">
+    <span class="divider-line"></span>
+    <span class="divider-ornament">✦</span>
+    <span class="divider-line"></span>
+  </div>
+
+  <div class="actions">
+    <button class="action-btn primary" (click)="playAgain.emit()">
+      <span class="btn-text">Set Sail Again</span>
+      <span class="btn-arrow">→</span>
+    </button>
+    <button class="action-btn secondary" (click)="backToMenu.emit()">
+      <span class="btn-text">Return to Atlas</span>
+    </button>
+  </div>
+</div>

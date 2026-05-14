@@ -1,0 +1,50 @@
+<div class="start-container">
+  <header class="start-header">
+    <div class="compass-rose">
+      <svg viewBox="0 0 100 100" class="compass">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
+        <path d="M50 5 L53 50 L50 95 L47 50 Z" fill="currentColor" opacity="0.6"/>
+        <path d="M5 50 L50 47 L95 50 L50 53 Z" fill="currentColor" opacity="0.6"/>
+        <circle cx="50" cy="50" r="6" fill="currentColor" opacity="0.8"/>
+        <circle cx="50" cy="50" r="3" fill="var(--color-gold)"/>
+      </svg>
+    </div>
+    <h1 class="title">Atlas of Nations</h1>
+    <p class="subtitle">Choose your expedition</p>
+  </header>
+
+  <div class="section-divider">
+    <span class="divider-line"></span>
+    <span class="divider-ornament">✦</span>
+    <span class="divider-line"></span>
+  </div>
+
+  <div class="mode-grid">
+    <button class="mode-card" (click)="select('infinite')">
+      <div class="frame-corner top-left"></div>
+      <div class="frame-corner top-right"></div>
+      <div class="frame-corner bottom-left"></div>
+      <div class="frame-corner bottom-right"></div>
+      <span class="mode-ornament">∞</span>
+      <span class="mode-title">Endless Voyage</span>
+      <span class="mode-desc">Identify flags without limit</span>
+    </button>
+
+    <button class="mode-card" (click)="select('limited')">
+      <div class="frame-corner top-left"></div>
+      <div class="frame-corner top-right"></div>
+      <div class="frame-corner bottom-left"></div>
+      <div class="frame-corner bottom-right"></div>
+      <span class="mode-ornament">XV</span>
+      <span class="mode-title">Fifteen Flags</span>
+      <span class="mode-desc">A focused run of fifteen nations</span>
+    </button>
+  </div>
+
+  <div class="section-divider">
+    <span class="divider-line"></span>
+    <span class="divider-ornament">✦</span>
+    <span class="divider-line"></span>
+  </div>
+</div>
