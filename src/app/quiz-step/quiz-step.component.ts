@@ -1,13 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Country } from '../model/country';
-import { NgClass } from '@angular/common';
 import { Answer } from '../model/answer';
 import { AnswerDataService } from '../model/answer-data.service';
 import { AnswerData } from '../model/answer-data';
 
 @Component({
     selector: 'app-quiz-step',
-    imports: [NgClass],
+    imports: [],
     templateUrl: './quiz-step.component.html',
     styleUrl: './quiz-step.component.scss'
 })
